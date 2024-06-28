@@ -11,11 +11,18 @@
 2. **Set up and run the Backend:**
     ```bat
     build.bat
-    NB: I used .bat because I am on Windows
+    NB: 
+    1- I used .bat because I am on Windows
+    2- Run your cmd as administrator borfor installing packages and make sure you pip version is upto date
     ```
 
 3. **Open the Frontend:**
     Open `Frontend/index.html` in a web browser.
+
+
+4. **How to run test:**
+    Command:  pytest test_app.py
+
 
 ## Assumptions
 
