@@ -32,7 +32,7 @@
 - Error handling is basic and may not cover all possible errors.
 
 
-## Entir Project Summary
+## Entire Project Summary
 Functionalities:
 1- HTML version extraction.
 2- Title extraction.
