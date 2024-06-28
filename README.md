@@ -34,12 +34,19 @@
 
 ## Entir Project Summary
 Functionalities:
+
 1- HTML version extraction.
+
 2- Title extraction.
+
 3- Heading count.
+
 4- Internal and external link extraction.
+
 5- Login form detection.
+
 6- Link validation using the validate_link function.
+
 7- Redirection Handling:
 The requests.head method with allow_redirects=True handles redirections automatically. If a link redirects, the final status and new location (if available) are captured.
 
