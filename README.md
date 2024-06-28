@@ -11,6 +11,7 @@
 2. **Set up and run the Backend:**
     ```bat
     build.bat
+    NB: I used .bat because I am on Windows
     ```
 
 3. **Open the Frontend:**
