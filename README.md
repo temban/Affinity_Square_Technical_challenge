@@ -4,17 +4,17 @@
 
 1. **Clone the repository:**
     ```sh
-    git clone <repository-url>
-    cd html_page_analyzer
+    git clone <https://github.com/temban/Affinity_Square_Technical_challenge>
+    cd Affinity_Square_Technical_challenge
     ```
 
-2. **Set up and run the server:**
+2. **Set up and run the Backend:**
     ```bat
     build.bat
     ```
 
-3. **Open the client:**
-    Open `client/index.html` in a web browser.
+3. **Open the Frontend:**
+    Open `Frontend/index.html` in a web browser.
 
 ## Assumptions
 
