@@ -13,7 +13,7 @@
     build.bat
     NB: 
     1- I used .bat because I am on Windows
-    2- Run your cmd as administrator borfor installing packages and make sure you pip version is upto date
+    2- Run your cmd as administrator borfor installing packages and make sure your pip version is upto date
     ```
 
 3. **Open the Frontend:**
