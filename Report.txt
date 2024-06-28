@@ -1,0 +1,41 @@
+*********************Affinity Square Technical challenge*****************************
+
+************Explanation*************
+
+Functionality: The analyze_page function now includes:
+1- HTML version extraction.
+2- Title extraction.
+3- Heading count.
+4- Internal and external link extraction.
+5- Login form detection.
+6- Link validation using the validate_link function.
+7- Redirection Handling:
+The requests.head method with allow_redirects=True handles redirections automatically. If a link redirects, the final status and new location (if available) are captured.
+
+FastAPI Endpoint:
+The /analyze endpoint receives a POST request with a JSON payload containing a URL to analyze.
+It returns a JSON response with detailed analysis including link validation results.
+
+
+************Running the Application**************
+
+Install Dependencies:
+Ensure you have installed the necessary packages (fastapi, requests, beautifulsoup4, uvicorn).
+
+Run the FastAPI Application:
+uvicorn main:app --reload
+
+
+**********Testing with Postman******************
+
+Use Postman or any HTTP client to send a POST request to http://localhost:8000/analyze.
+Provide a JSON payload in the request body:
+
+{
+    "url": "https://example.com"
+}
+Send the request and observe the JSON response with the analysis results, including link validation details.
+
+Notes:
+Error Handling: There is in the code a basic error handling to raise an HTTP 400 error if there's an issue with the request or if the URL is not reachable.
+Performance Considerations: We can adjust the timeout value (timeout=5 in requests.head) based on your application's requirements and network conditions to balance between responsiveness and robustness.

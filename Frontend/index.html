@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Page Analyzer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        .spinner-wrapper {
+            position: relative;
+            min-height: 200px; /* Ensure there's space for the spinner */
+        }
+        .spinner-border {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">HTML Page Analyzer</h1>
+        <form id="urlForm" class="mb-4">
+            <div class="form-group">
+                <label for="urlInput">Enter URL:</label>
+                <input type="text" id="urlInput" name="url" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze</button>
+        </form>
+      
+        <h2>Results:</h2>
+        
+        <div id="resultsWrapper" class="spinner-wrapper">
+            <div id="loading" class="spinner-border text-primary" role="status" style="width: 8rem; height: 8rem; font-size: large;">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <table id="resultsTable" class="table table-bordered table-striped" style="display:none;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML Version</td>
+                        <td id="htmlVersion"></td>
+                    </tr>
+                    <tr>
+                        <td>Title</td>
+                        <td id="title"></td>
+                    </tr>
+                    <tr>
+                        <td>Headings</td>
+                        <td id="headings"></td>
+                    </tr>
+                    <tr>
+                        <td>Internal Links</td>
+                        <td id="internalLinks"></td>
+                    </tr>
+                    <tr>
+                        <td>External Links</td>
+                        <td id="externalLinks"></td>
+                    </tr>
+                    <tr>
+                        <td>Login Form</td>
+                        <td id="loginForm"></td>
+                    </tr>
+                    <tr>
+                        <td>Internal Links Validation</td>
+                        <td id="internalLinksValidation"></td>
+                    </tr>
+                    <tr>
+                        <td>External Links Validation</td>
+                        <td id="externalLinksValidation"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="error" class="alert alert-danger" style="display:none; "></div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#urlForm').on('submit', function(event) {
+                event.preventDefault();
+                var url = $('#urlInput').val();
+
+                $('#resultsTable').hide(); // Hide the previous table
+                $('#error').hide(); // Hide any previous error messages
+                $('#loading').show();  // Show the loading spinner
+
+                var settings = {
+                    "url": "http://127.0.0.1:8000/analyze",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "url": url
+                    }),
+                };
+
+                $.ajax(settings).done(function(response) {
+                    $('#loading').hide();  // Hide the loading spinner
+
+                    $('#htmlVersion').text(response.html_version);
+                    $('#title').text(response.title);
+                    
+                    var headings = "";
+                    for (var key in response.headings) {
+                        headings += key + ": " + response.headings[key] + "<br>";
+                    }
+                    $('#headings').html(headings);
+
+                    $('#internalLinks').html(response.internal_links.join('<br>'));
+                    $('#externalLinks').html(response.external_links.join('<br>'));
+
+                    $('#loginForm').text(response.login_form ? "Yes" : "No");
+
+                    var internalLinksValidation = "";
+                    response.internal_links_validation.forEach(function(link) {
+                        internalLinksValidation += link.url + " - " + (link.reachable ? "Reachable" : "Not Reachable") + "<br>";
+                    });
+                    $('#internalLinksValidation').html(internalLinksValidation);
+
+                    var externalLinksValidation = "";
+                    response.external_links_validation.forEach(function(link) {
+                        externalLinksValidation += link.url + " - " + (link.reachable ? "Reachable" : "Not Reachable");
+                        if (link.reason) {
+                            externalLinksValidation += " (" + link.reason + ")";
+                        }
+                        externalLinksValidation += "<br>";
+                    });
+                    $('#externalLinksValidation').html(externalLinksValidation);
+
+                    $('#resultsTable').show();
+                }).fail(function(jqXHR) {
+                    $('#loading').hide();  // Hide the loading spinner if the request fails
+                    var errorMessage = "An error occurred";
+                    if (jqXHR.status === 400) {
+                        errorMessage = "Invalid URL";
+                    } else if (jqXHR.status === 404) {
+                        errorMessage = "URL not found";
+                    } else if (jqXHR.status === 500) {
+                        errorMessage = "Internal server error";
+                    }
+                    $('#error').text(errorMessage).show();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
